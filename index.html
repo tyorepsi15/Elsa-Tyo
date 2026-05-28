@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undangan Pernikahan | Tyo & Elsa</title>
-    <link rel="icon" href="https://lh3.googleusercontent.com/d/17kW5YvP-KboD4TI6UxjFsU3bByZ5HaQM" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -80,9 +79,45 @@
         #lightbox img { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 8px; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #lightbox.active img { transform: scale(1); }
         .close-lightbox { position: absolute; top: 20px; right: 20px; color: white; font-size: 40px; cursor: pointer; z-index: 1001; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+        /* Custom Loading Animation */
+        @keyframes load-bar {
+            0% { width: 0%; left: 0; right: auto; }
+            50% { width: 100%; left: 0; right: auto; }
+            51% { width: 100%; right: 0; left: auto; }
+            100% { width: 0%; right: 0; left: auto; }
+        }
+        .animate-load-bar {
+            animation: load-bar 2s ease-in-out infinite;
+            position: absolute;
+        }
     </style>
 </head>
 <body class="font-body text-paper-dark">
+
+    <!-- Loading Screen (Preloader) -->
+    <div id="preloader" class="fixed inset-0 z-[9999] bg-gradient-to-br from-paper-light to-[#98c1d9] flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="relative w-32 h-32 mb-4 flex justify-center items-center">
+            <!-- Ripple/Water effect -->
+            <div class="absolute w-20 h-20 bg-paper-blue/20 rounded-full animate-ping"></div>
+            <div class="absolute w-16 h-16 bg-paper-blue/40 rounded-full animate-ping" style="animation-delay: 0.2s;"></div>
+            <!-- Floating Paper Boat -->
+            <i class="fas fa-paper-plane text-5xl text-paper-dark relative z-10 float-anim drop-shadow-md"></i>
+        </div>
+        <h2 class="font-serif text-3xl text-paper-dark animate-pulse">Mempersiapkan Pelayaran...</h2>
+        <p class="text-sm text-gray-600 mt-2 mb-6">Mohon tunggu sebentar, mengunduh aset visual.</p>
+        
+        <!-- Progress Bar Indicator -->
+        <div class="w-48 h-1.5 bg-white/50 rounded-full overflow-hidden relative">
+            <div class="h-full bg-paper-blue animate-load-bar rounded-full"></div>
+        </div>
+    </div>
+
+    <!-- Custom Toast Notification -->
+    <div id="toast" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[10000] bg-paper-dark text-white px-6 py-3 rounded-full shadow-xl opacity-0 pointer-events-none transition-opacity duration-300 flex items-center gap-2 text-sm font-semibold max-w-[90vw] text-center">
+        <i class="fas fa-info-circle text-paper-blue"></i>
+        <span id="toast-message">Pesan</span>
+    </div>
 
     <!-- Cover -->
     <div id="cover-screen">
@@ -148,7 +183,7 @@
 
         <!-- Couple -->
         <section id="couple" class="py-24 px-4 bg-paper-white relative">
-            <!-- Ornamen Dekorasi 1 (Atas/Peralihan) -->
+            <!-- Ornamen Dekorasi 1 -->
             <div class="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none z-10 float-anim"><img src="https://lh3.googleusercontent.com/d/1lrDmoQhYE1Nt-WLQ-wqUc5AOZLJvyv98" style="transform: scale(1) translate(-51%, -14%);" alt="Decor 1"></div>
 
             <div class="max-w-4xl mx-auto text-center fade-in relative z-20">
@@ -222,10 +257,8 @@
 
         <!-- Event -->
         <section id="event" class="py-24 px-4 bg-paper-dark text-white relative">
-            <!-- Pola Kertas untuk BG Gelap -->
             <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/rice-paper.png')]"></div>
             
-            <!-- Ornamen Dekorasi 2 (Atas/Peralihan Event) -->
             <div class="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none z-10 float-anim"><img src="https://lh3.googleusercontent.com/d/1R4zIdhgWOzZMfEF-qn3qhkpNfbt5tgwx" style="transform: scale(1.15) translate(-46%, -36%);" alt="Decor 2"></div>
 
             <div class="max-w-5xl mx-auto relative z-10">
@@ -317,7 +350,6 @@
                         </div>
                     </div>
 
-                    
                     <div class="bg-white p-8 rounded-2xl shadow-xl border-t-[6px] border-paper-blue w-full max-w-sm mx-auto relative overflow-hidden flex-1 mt-6 md:mt-0 fade-in">
                         <div class="absolute -right-6 -top-6 opacity-5 text-9xl text-paper-blue"><i class="fas fa-credit-card"></i></div>
                         <div class="relative z-10">
@@ -331,7 +363,6 @@
                             <p id="copy-msg-2" class="text-emerald-500 font-semibold text-sm mt-4 hidden transition-all duration-300 transform scale-95"><i class="fas fa-check-circle mr-1"></i> Nomor rekening berhasil disalin!</p>
                         </div>
                     </div>
-                    
                 </div>
             </div>
         </section>
@@ -380,13 +411,8 @@
 
         <!-- FOOTER -->
         <footer class="bg-paper-dark text-paper-light text-center py-10 relative overflow-hidden flex flex-col items-center justify-center min-h-[250px]">
-            <!-- Perahu Kertas / PNG Statis Footer di belakang T&E (z-0) -->
             <div class="absolute left-1/2 -translate-x-1/2 pointer-events-none z-0 float-anim"><img src="https://lh3.googleusercontent.com/d/17kW5YvP-KboD4TI6UxjFsU3bByZ5HaQM" style="transform: scale(0.65) translate(-186%, -1%);" alt="Footer Decor"></div>
-
-            <!-- Background Icon Faint -->
             <i class="fas fa-paper-plane text-5xl opacity-10 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0"></i>
-            
-            <!-- Teks Footer (di atas gambar, z-10) -->
             <h2 class="font-serif text-4xl mb-4 relative z-10 filter drop-shadow-md">T & E</h2>
             <p class="text-blue-200 text-sm mb-4 italic relative z-10">"Dan perahu ini pun mulai berlayar..."</p>
             <p class="text-gray-400 text-xs relative z-10">&copy; 2026 Tyo & Elsa. Created with Love.</p>
@@ -401,6 +427,35 @@
     </main>
 
     <script>
+        // --- CUSTOM TOAST NOTIFICATION ---
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            
+            // Hide toast after 4 seconds
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 4000);
+        }
+
+        // --- PRELOADER (LOADING SCREEN) LOGIC ---
+        // window.onload guarantees all assets (images, frames, styles) are fully downloaded
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            // Give a slight extra delay so user can see the custom loading animation briefly
+            setTimeout(() => {
+                preloader.style.opacity = '0'; // Fade out
+                setTimeout(() => {
+                    preloader.style.display = 'none'; // Remove from DOM flow
+                    // Optionally start fetching comments now that the site is loaded
+                    loadComments(); 
+                }, 700); // Wait for transition duration
+            }, 800);
+        });
+
+        // --- INVITATION LOGIC ---
         let guestName = "Tamu Undangan";
         const urlParams = new URLSearchParams(window.location.search);
         
@@ -463,6 +518,7 @@
             }
         }
 
+        // --- FORM & GUESTBOOK LOGIC ---
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwD7DRypsSOmvZszovQUVu89VlYSaP37EYvqfv0WJSKWPOTRd299vxVBly32saL22pd/exec';
         const form = document.forms['submit-to-google-sheet'];
         const btnSubmit = document.getElementById('btn-submit');
@@ -516,7 +572,7 @@
                         hadir: formData.get('hadir'),
                         ucapan: formData.get('ucapan')
                     });
-                    alert('Simulasi: Pesan terkirim!\n(Pesan ini tidak akan tersimpan secara permanen. Untuk fungsi nyata, masukkan URL Spreadsheet di panel Builder)');
+                    showToast('Simulasi: Pesan berhasil terkirim!');
                     form.reset();
                     btnSubmit.disabled = false;
                     btnSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Ucapan';
@@ -527,21 +583,20 @@
 
             fetch(scriptURL, { method: 'POST', body: formData })
                 .then(response => {
-                    alert('Terima kasih! Pesan dan konfirmasi Anda telah tersimpan.');
+                    showToast('Terima kasih! Pesan dan konfirmasi Anda telah tersimpan.');
                     form.reset();
                     btnSubmit.disabled = false;
                     btnSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Ucapan';
                     loadComments();
                 })
                 .catch(error => {
-                    alert('Terjadi kesalahan. Silakan coba lagi.');
+                    showToast('Terjadi kesalahan saat mengirim. Silakan coba lagi.');
                     btnSubmit.disabled = false;
                     btnSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Ucapan';
                 });
         });
 
-        window.addEventListener('load', loadComments);
-
+        // --- UTILITIES ---
         function openLightbox(src) {
             const lb = document.getElementById('lightbox');
             const lbImg = document.getElementById('lightbox-img');
@@ -560,19 +615,26 @@
         }
 
         function copyRekening(rekNum, msgId) {
-            navigator.clipboard.writeText(rekNum).then(() => {
-                const msg = document.getElementById(msgId);
-                msg.classList.remove('hidden');
-                msg.classList.remove('scale-95');
-                msg.classList.add('scale-100');
-                setTimeout(() => {
-                    msg.classList.add('hidden');
-                    msg.classList.remove('scale-100');
-                    msg.classList.add('scale-95');
-                }, 3000);
-            });
+            // Updated to be more resilient for iFrame / Mobile environments
+            const tempInput = document.createElement("input");
+            tempInput.value = rekNum;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            const msg = document.getElementById(msgId);
+            msg.classList.remove('hidden');
+            msg.classList.remove('scale-95');
+            msg.classList.add('scale-100');
+            setTimeout(() => {
+                msg.classList.add('hidden');
+                msg.classList.remove('scale-100');
+                msg.classList.add('scale-95');
+            }, 3000);
         }
 
+        // --- OBSERVERS & INTERVALS ---
         const observer = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -605,6 +667,7 @@
             el.scrollBy({ left: dir * 320, behavior: 'smooth' });
         }
 
+        // Drag to scroll gallery
         (function() {
             const el = document.getElementById('gallery-scroll');
             let isDown = false, startX, scrollLeft;
